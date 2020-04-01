@@ -7,7 +7,7 @@
 #include <assert.h>
 
 
-char final[0] = "";     //final string
+
 volatile int counter;   //global counter
 volatile int numThreads;
 pthread_mutex_t lock;
@@ -18,8 +18,8 @@ void* threadWork(void *arg){
 	assert(pthread_mutex_lock(&lock)==0); //LOCK
 
 	char * lineToAdd = (char *) arg;
-	printf("Argument is : %p\n", arg);
-	strncat(final, lineToAdd, 1);
+	printf("Argument is : %p\n", lineToAdd);
+
 
 	assert(pthread_mutex_unlock(&lock)==0); //UNLOCK
 }
@@ -27,11 +27,13 @@ void* threadWork(void *arg){
 
 void main(int argc, char *argv[]){
 
+	assert(pthread_mutex_init(&lock, NULL) == 0);  //Initialize lock
 	FILE *f;
 	int maxLen = 70;
 	char str[maxLen]; 
 	int numThreads = atoi(argv[1]);	     //threads= number of threads
 	printf("Number of threads to create = %d\n", numThreads);
+	
 
 	//TODO change this to queue
 	char threadLines[numThreads][maxLen+1];  //2D array to store strings
@@ -57,21 +59,18 @@ void main(int argc, char *argv[]){
 	
 	pthread_t thread_id[numThreads+1];      //extra space for null character
 
-	assert(pthread_mutex_lock(&lock)==0); //LOCK
+	//assert(pthread_mutex_lock(&lock)==0); //LOCK
 
-	for(int i = 0; i < numThreads; i++){     //Trying to print threadLines
-		printf("I am thread %d\n", i);
-		printf("I added the following line: %s\n", threadLines[i]);
-	}
 
 	for (int i = 0; i < numThreads; i++){
+		assert(pthread_mutex_lock(&lock)==0);
 
-		if(pthread_create(&thread_id[i], NULL, threadWork, (void*)threadLines[i])){ //create thread and pass it the line to be added
+		if(pthread_create(&thread_id[i], NULL, threadWork, (void *)threadLines[i])){ //create thread and pass it the line to be added
 			printf("Thread Creation Failure\n");
+			assert(pthread_mutex_unlock(&lock)==0); //UNLOCK
 		}
-	}
-	assert(pthread_mutex_unlock(&lock)==0); //UNLOCK
-			
+		assert(pthread_mutex_unlock(&lock)==0);
+	}		
 }
 
 
