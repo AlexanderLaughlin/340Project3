@@ -31,7 +31,7 @@ void main(int argc, char *argv[]){
 	FILE *f;
 	int maxLen = 70;
 	char str[maxLen]; 
-	int numThreads = atoi(argv[1]);	     //threads= number of threads
+	int numThreads = atoi(argv[1]);
 	printf("Number of threads to create = %d\n", numThreads);
 	
 
@@ -51,7 +51,7 @@ void main(int argc, char *argv[]){
 
 		//TODO add code to push these onto queue instead of array
 
-		//printf("String = %s\n", str); //print to check if working
+		printf("String = %s\n", str); //print to check if working
 		
 	}
 
@@ -70,6 +70,10 @@ void main(int argc, char *argv[]){
 			assert(pthread_mutex_unlock(&lock)==0); //UNLOCK
 		}
 		assert(pthread_mutex_unlock(&lock)==0);
+	}
+
+	for (int i = 0; i < numThreads; i++){
+		assert(pthread_join(thread_id[i], NULL)==0);   //wait for threads to join
 	}		
 }
 
