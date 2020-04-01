@@ -6,7 +6,7 @@
 #include <pthread.h>
 #include <assert.h>
 
-volatile int strLen = 0;  //length of string to append
+
 char final[0] = "";     //final string
 volatile int counter;   //global counter
 volatile int numThreads;
@@ -28,24 +28,27 @@ void* threadWork(void *arg){
 void main(int argc, char *argv[]){
 
 	FILE *f;
-	char str[70];
+	int maxLen = 70;
+	char str[maxLen]; 
 	int numThreads = atoi(argv[1]);	     //threads= number of threads
 	printf("Number of threads to create = %d\n", numThreads);
 
-	char threadLines[numThreads][71];  //2D array to store strings
-					   //hardcoded to strLength+1 = 71
-
+	//TODO change this to queue
+	char threadLines[numThreads][maxLen+1];  //2D array to store strings
+					   
+	//OPEN FILE
 	f = fopen("shakespeare.txt", "r");
 	if (f == NULL){
 		printf("Error opening file\n");
 	}
+
 	for (int i = 0; i<numThreads; i++){
-		//read lines from shakespeare.txt and store in array
-		//threads will remove elements from array to add to final string
 	
-	
-		fgets (str, 70, f); //this is reading lines from the file
-		strcpy(threadLines[i], str);
+		fgets (str, maxLen, f); 	//this is reading lines from the file
+		strcpy(threadLines[i], str); 	//this is writing lines to threadLines array
+
+		//TODO add code to push these onto queue instead of array
+
 		//printf("String = %s\n", str); //print to check if working
 		
 	}
