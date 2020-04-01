@@ -46,7 +46,7 @@ void main(int argc, char *argv[]){
 	
 		fgets (str, 70, f); //this is reading lines from the file
 		strcpy(threadLines[i], str);
-		printf("String = %s\n", str); //print to check if working
+		//printf("String = %s\n", str); //print to check if working
 		
 	}
 
@@ -56,8 +56,9 @@ void main(int argc, char *argv[]){
 
 	assert(pthread_mutex_lock(&lock)==0); //LOCK
 
-	for(int i = 0; i < 100; i++){     //Trying to print threadLines
-		printf("%s", threadLines[i]);
+	for(int i = 0; i < numThreads; i++){     //Trying to print threadLines
+		printf("I am thread %d\n", i);
+		printf("I added the following line: %s\n", threadLines[i]);
 	}
 
 	for (int i = 0; i < numThreads; i++){
