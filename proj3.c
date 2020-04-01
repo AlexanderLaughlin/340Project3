@@ -14,8 +14,14 @@ pthread_mutex_t lock;
 
 
 void* threadWork(void *arg){
+
+	assert(pthread_mutex_lock(&lock)==0); //LOCK
+
 	char * lineToAdd = (char *) arg;
 	printf("Argument is : %p\n", arg);
+	strncat(final, lineToAdd, 1);
+
+	assert(pthread_mutex_unlock(&lock)==0); //UNLOCK
 }
 	
 
