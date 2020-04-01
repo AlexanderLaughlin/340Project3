@@ -14,18 +14,19 @@ pthread_mutex_t lock;
 
 
 void* threadWork(void *arg){
-
-	printf("Argument is : %p", arg);
+	char * lineToAdd = (char *) arg;
+	printf("Argument is : %p\n", arg);
 }
 	
 
 void main(int argc, char *argv[]){
 
 	FILE *f;
-	char str[25];
+	char str[70];
 	int numThreads = atoi(argv[1]);	     //threads= number of threads
 	printf("Number of threads to create = %d\n", numThreads);
 
+	char threadLines[70*numThreads];
 
 	f = fopen("shakespeare.txt", "r");
 	if (f == NULL){
@@ -36,20 +37,21 @@ void main(int argc, char *argv[]){
 		//threads will remove elements from array to add to final string
 	
 	
-		if (fgets (str, 25, f)!=NULL) {
-			printf("String = %s\n", str);
-		}
+		fgets (str, 70, f); //this is reading lines from the file
+		strncat(threadLines, str, 1);  //this should be adding the line read to the threadlines array
+		printf("String = %s\n", str); //print to check if working
+		
 	}
 
 		
-	strLen = 10;  
+	
 	pthread_t thread_id[numThreads+1];      //extra space for null character
 
 	assert(pthread_mutex_lock(&lock)==0); //LOCK
 
 	for (int i = 0; i < numThreads; i++){
 
-		if(pthread_create(&thread_id[i], NULL, threadWork, (void*)str)){
+		if(pthread_create(&thread_id[i], NULL, threadWork, (void*)threadLines[i])){ //create thread and pass it the line to be added
 			printf("Thread Creation Failure\n");
 		}
 	}
