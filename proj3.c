@@ -21,6 +21,19 @@ void* threadWork(void *arg){
 
 void main(int argc, char *argv[]){
 
+	FILE *f;
+	char str[25];
+
+
+	f = fopen("shakespeare.txt", "r");
+	if (f == NULL){
+		printf("Error opening file\n");
+	}
+
+	if (fgets (str, 25, f)!=NULL) {
+		printf("String = %s\n", str);
+	}
+
 	int numThreads = atoi(argv[1]);	     //threads= number of threads
 	printf("Number of threads to create = %d\n", numThreads);	
 	strLen = 10;  
@@ -30,11 +43,11 @@ void main(int argc, char *argv[]){
 
 	for (int i = 0; i < numThreads; i++){
 		if(pthread_create(&thread_id[i], NULL, threadWork, NULL)){
-			printf("Thread Creation Failure");
+			printf("Thread Creation Failure\n");
 		}
 	assert(pthread_mutex_unlock(&lock)==0); //UNLOCK
 		
-}
+	}
 }
 
 
