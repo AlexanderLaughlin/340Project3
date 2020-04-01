@@ -32,7 +32,8 @@ void main(int argc, char *argv[]){
 	int numThreads = atoi(argv[1]);	     //threads= number of threads
 	printf("Number of threads to create = %d\n", numThreads);
 
-	char threadLines[70*numThreads];
+	char threadLines[numThreads][71];  //2D array to store strings
+					   //hardcoded to strLength+1 = 71
 
 	f = fopen("shakespeare.txt", "r");
 	if (f == NULL){
@@ -44,7 +45,7 @@ void main(int argc, char *argv[]){
 	
 	
 		fgets (str, 70, f); //this is reading lines from the file
-		threadLines[i] = str;
+		strcpy(threadLines[i], str);
 		printf("String = %s\n", str); //print to check if working
 		
 	}
@@ -54,7 +55,11 @@ void main(int argc, char *argv[]){
 	pthread_t thread_id[numThreads+1];      //extra space for null character
 
 	assert(pthread_mutex_lock(&lock)==0); //LOCK
-	printf("ThreadLines[0] = : %d\n", threadLines[0]);
+
+	for(int i = 0; i < 100; i++){     //Trying to print threadLines
+		printf("%s", threadLines[i]);
+	}
+
 	for (int i = 0; i < numThreads; i++){
 
 		if(pthread_create(&thread_id[i], NULL, threadWork, (void*)threadLines[i])){ //create thread and pass it the line to be added
