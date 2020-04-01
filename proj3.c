@@ -44,7 +44,7 @@ void main(int argc, char *argv[]){
 	
 	
 		fgets (str, 70, f); //this is reading lines from the file
-		strncat(threadLines, str, 1);  //this should be adding the line read to the threadlines array
+		threadLines[i] = str;
 		printf("String = %s\n", str); //print to check if working
 		
 	}
@@ -54,7 +54,7 @@ void main(int argc, char *argv[]){
 	pthread_t thread_id[numThreads+1];      //extra space for null character
 
 	assert(pthread_mutex_lock(&lock)==0); //LOCK
-
+	printf("ThreadLines[0] = : %d\n", threadLines[0]);
 	for (int i = 0; i < numThreads; i++){
 
 		if(pthread_create(&thread_id[i], NULL, threadWork, (void*)threadLines[i])){ //create thread and pass it the line to be added
